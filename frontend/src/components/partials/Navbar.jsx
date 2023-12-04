@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userLogoutAction } from '../../redux/actions/userAction'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { googleLogout } from '@react-oauth/google';
+import { toast } from 'react-toastify'
 
 const Authorized = ({userInfo, googleUser, logout, logoutGoogle}) =>{
   return (
@@ -39,6 +40,7 @@ function Navbar() {
 
   const logoutGoogle = () =>{
     googleLogout()
+    toast.success('Loggout Successful !')
     localStorage.removeItem('googleUser')
     localStorage.removeItem('googleToken')
     window.location.reload(true)
