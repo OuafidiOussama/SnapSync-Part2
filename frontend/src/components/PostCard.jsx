@@ -10,7 +10,7 @@ const PostCard = ({post, onUpdate}) =>{
   const googleUser = JSON.parse(localStorage.getItem('googleUser'))
   const {_id, createdAt, creator, tags, title, message, likes, picture} = post
   const createdTime = moment(createdAt).fromNow()
-  
+
 
   const handleUpdatePost=()=>{
     if(onUpdate){

@@ -2,6 +2,7 @@ const ErrorResponse = require('../utils/errorResponse')
 const jwt = require('jsonwebtoken')
 const User = require('../models/UserModel')
 const Post = require('../models/PostModel')
+const {jwtDecode} = require('jwt-decode')
 
 authenticate = async (req, res, next)=>{
     const authHeaders = req.headers['authorization']
@@ -11,12 +12,13 @@ authenticate = async (req, res, next)=>{
     try{
         const token = authHeaders.split(' ')[1]
         if(token.length >= 500){
-            const decoded = jwt.decode(token)
+            const decoded = jwtDecode(token)
             req.user = decoded
             next()
         } else{
             const decoded = jwt.verify(token, process.env.SECRET_KEY)
             req.user = await User.findById(decoded.id)
+            console.log(req.user);
             next()
         }
     }catch(err){
@@ -25,7 +27,7 @@ authenticate = async (req, res, next)=>{
 }
 
 isCreator = async (req, res, next)=>{
-    const userId = req.user.id || req.user.sub
+    const userId = (req.user._id || req.user.sub)
     const postId = req.params.id
     const post = await Post.findOne({_id:postId})
     

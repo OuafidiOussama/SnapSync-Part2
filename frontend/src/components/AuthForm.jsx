@@ -81,7 +81,7 @@ const Login = ({responseMessage, errorMessage, register}) => {
   )
 }
 
-const Register = ({responseMessage, errorMessage, login})=>{
+const Register = ({responseMessage, errorMessage, login, setPath})=>{
   const dispatch = useDispatch()
   const formik = useFormik({
     initialValues:{
@@ -96,6 +96,7 @@ const Register = ({responseMessage, errorMessage, login})=>{
       // alert(JSON.stringify(values, null, 5))
       dispatch(userRegisterAction(values))
       actions.resetForm()
+      setPath('login')
     }
   })
   return(
@@ -196,6 +197,6 @@ export default function AuthForm() {
 
   const [path, setPath] = useState('login')
 
-  return path === 'login' ? (<Login responseMessage={responseMessage} errorMessage={errorMessage} register={register}  />) : (<Register responseMessage={responseMessage} errorMessage={errorMessage} login={login} />)
+  return path === 'login' ? (<Login responseMessage={responseMessage} errorMessage={errorMessage} register={register}  />) : (<Register responseMessage={responseMessage} errorMessage={errorMessage} login={login} setPath={setPath} />)
 
 }
