@@ -14,6 +14,8 @@ export function AddFrom({isUpdate, setIsUpdate, postToUpdate, setPostToUpdate}){
     const {userInfo} = useSelector(state=> state.login)
     const {loading} = useSelector(state => state.createPost)
     const {updateLoading} = useSelector(state => state.updatePost)
+    const googleUser = JSON.parse(localStorage.getItem('googleUser'))
+
 
     const formik = useFormik({
       initialValues:{
@@ -28,7 +30,6 @@ export function AddFrom({isUpdate, setIsUpdate, postToUpdate, setPostToUpdate}){
           // alert(JSON.stringify(values, null, 4))
           if(postToUpdate){
             const id = postToUpdate._id
-            console.log(id);
             dispatch(updatePostAction(id, values))
             actions.resetForm()
             setIsUpdate(false)
@@ -58,9 +59,9 @@ export function AddFrom({isUpdate, setIsUpdate, postToUpdate, setPostToUpdate}){
       }
     }, [isUpdate, postToUpdate]);
 
-    return userInfo ? (
+    return userInfo || googleUser ? (
     <form onSubmit={formik.handleSubmit}>
-      <div className="absolute right-0 -translate-x-24  text-center bg-white shadow-lg w-80 rounded-xl py-5 px-10">
+      <div className="absolute top-[400px] right-0 -translate-x-24  text-center bg-white shadow-lg w-80 rounded-xl py-5 px-10">
         <p className="text-md font-medium pb-2">{isUpdate ? `Updating "${postToUpdate.title}"` : "Creating A Memory"}</p>
         <div className="gap-y-4 flex flex-col">
           <TextField 
@@ -120,7 +121,7 @@ export function AddFrom({isUpdate, setIsUpdate, postToUpdate, setPostToUpdate}){
     </form>
     ) :
     (
-      <div className="absolute right-0 -translate-x-24  text-center bg-white shadow-lg w-80 rounded-xl py-5 px-10">
+      <div className="absolute top-[380px] right-0 -translate-x-24  text-center bg-white shadow-lg w-80 rounded-xl py-5 px-10">
         <p>Please Sign In to create your own posts and like other posts</p>
       </div>
     )

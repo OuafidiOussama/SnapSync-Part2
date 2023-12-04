@@ -2,6 +2,8 @@ import { useState } from "react";
 import { AddFrom } from "../components/AddFrom";
 import Layout from "../components/Layout/Layout";
 import { PostContainer } from "../components/PostContainer";
+import Search from "../components/partials/Search";
+import Pagination from "../components/partials/Pagination";
 
 function Home() {
     const [isUpdate, setIsUpdate] = useState(false);
@@ -15,6 +17,8 @@ function Home() {
     return(
         <Layout>
             <AddFrom isUpdate={isUpdate} setIsUpdate={setIsUpdate} setPostToUpdate={setPostToUpdate} postToUpdate={postToUpdate}/>
+            <Search />
+            <Pagination />
             <PostContainer onUpdate={handleUpdate}/>
         </Layout>
     ) 

@@ -10,6 +10,8 @@ import { userLoginAction, userRegisterAction } from '../redux/actions/userAction
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useHistory } from 'react-router-dom'
+import { jwtDecode } from "jwt-decode";
+import { toast } from 'react-toastify';
 
 
 const Login = ({responseMessage, errorMessage, register}) => {
@@ -19,7 +21,7 @@ const Login = ({responseMessage, errorMessage, register}) => {
 
   useEffect(()=>{
     if(isAuthenticated){
-      history.push('/')
+      history.push("/")
     }
   },[isAuthenticated])
 
@@ -173,11 +175,16 @@ const Register = ({responseMessage, errorMessage, login})=>{
 }
 
 export default function AuthForm() {
-  const responseMessage = (response) => {
-    console.log(response);
+  let history = useHistory()
+  const responseMessage = (response) => { 
+    localStorage.setItem('googleToken', JSON.stringify(response.credential))
+    let decoded = jwtDecode(response.credential)
+    localStorage.setItem("googleUser", JSON.stringify(decoded))
+    toast.success("Login Successful")
+    history.push("/")
   };
   const errorMessage = (error) => {
-      console.log(error);
+      toast.error("Login Failed")
   };
   
   const register = ()=>{

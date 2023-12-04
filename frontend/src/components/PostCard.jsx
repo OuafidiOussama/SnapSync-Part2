@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react'
 const PostCard = ({post, onUpdate}) =>{
   const dispatch = useDispatch();
   const {userInfo} = useSelector(state=>state.login)
+  const googleUser = JSON.parse(localStorage.getItem('googleUser'))
   const {_id, createdAt, creator, tags, title, message, likes, picture} = post
   const createdTime = moment(createdAt).fromNow()
   
@@ -40,7 +41,7 @@ const PostCard = ({post, onUpdate}) =>{
             <div className="w-full h-full absolute bg-black opacity-40"></div>
             <img src={picture} alt="hello" className="object-cover w-full h-full" />
             <div className="absolute w-full h-full top-0 flex px-5 pt-5 justify-between text-white">
-                <p className="text-xl flex flex-col">{creator.name}<span className="text-sm">{createdTime}</span></p>
+                <p className="text-xl flex flex-col">{creator}<span className="text-sm">{createdTime}</span></p>
                 <button className='h-12'  id='update' onClick={handleUpdatePost}>
                   <svg
                     fill='#ffff' xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" width="24"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z" /></svg>
@@ -60,7 +61,7 @@ const PostCard = ({post, onUpdate}) =>{
 
 
         <div className="flex justify-between w-full mt-4">
-          {likes.includes(userInfo && userInfo.user._id) ?
+          {likes.includes((userInfo && userInfo.user._id) || (googleUser && googleUser.sub)) ?
             <button type="submit" onClick={(e) => unLike(e, _id)}>
               <div className="flex items-center text-indigo-500">
                 <Icon icon='solar:like-bold' className='text-3xl' />

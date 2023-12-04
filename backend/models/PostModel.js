@@ -3,8 +3,10 @@ const {ObjectId} = mongoose.Schema
 
 const postSchema = new mongoose.Schema({
     creator:{
-        type: ObjectId,
-        ref: 'users'
+        type: String,
+    },
+    publishedBy:{
+        type: String
     },
     title:{
         type: String,
@@ -27,8 +29,7 @@ const postSchema = new mongoose.Schema({
         required: [true, 'Please Provide a Picture']
     },
     likes: [{
-        type: ObjectId,
-        ref: 'users'
+        type: String
     }]
 }, {timestamps: true})
 

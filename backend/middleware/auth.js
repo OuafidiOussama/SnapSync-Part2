@@ -10,23 +10,29 @@ authenticate = async (req, res, next)=>{
     }
     try{
         const token = authHeaders.split(' ')[1]
-        const decoded = jwt.verify(token, process.env.SECRET_KEY)
-        req.user = await User.findById(decoded.id)
-        next()
+        if(token.length >= 500){
+            const decoded = jwt.decode(token)
+            req.user = decoded
+            next()
+        } else{
+            const decoded = jwt.verify(token, process.env.SECRET_KEY)
+            req.user = await User.findById(decoded.id)
+            next()
+        }
     }catch(err){
         next(new ErrorResponse('Token Has Been Changed', 401))
     }
 }
 
 isCreator = async (req, res, next)=>{
-    const userId = req.user.id
+    const userId = req.user.id || req.user.sub
     const postId = req.params.id
     const post = await Post.findOne({_id:postId})
     
     if(!post){
         return next(new ErrorResponse('No Post was Found', 404))
     }
-    const creatorId = post.creator.toString()
+    const creatorId = post.publishedBy
     
     if(userId !== creatorId){
         return next(new ErrorResponse('You cant Operate on this post'))

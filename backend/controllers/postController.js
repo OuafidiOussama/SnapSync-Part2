@@ -6,7 +6,8 @@ addPost = async (req, res, next) =>
 {
     try {
         const data = {
-            creator: req.user._id,
+            publishedBy: req.user.id || req.user.sub,
+            creator: req.user.name || req.user.name,
             title: req.body.title,
             message: req.body.message,
             tags: req.body.tags,
@@ -26,7 +27,7 @@ addPost = async (req, res, next) =>
 getAllPosts = async (req, res, next) =>
 {
     try {
-        const posts = await Post.find().sort({ createdAt: -1}).populate('creator', 'name')
+        const posts = await Post.find().sort({ createdAt: -1})
         res.status(201).json({
             success: true,
             posts
@@ -41,7 +42,7 @@ likePost = async (req, res, next) =>{
         const postId = req.params.id
         const post = await Post.findByIdAndUpdate(
             { _id: postId },
-            { $addToSet: {likes: req.user.id }},
+            { $addToSet: {likes: req.user.id || req.user.sub }},
             {new: true}
         )
         if(!post){
@@ -61,7 +62,7 @@ removeLike = async(req, res, next) =>{
         const postId = req.params.id
         const post = await Post.findByIdAndUpdate(
             { _id: postId },
-            { $pull: {likes: req.user.id }},
+            { $pull: {likes: req.user.id || req.user.sub }},
             {new: true}
         )
         if(!post){
