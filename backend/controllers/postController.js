@@ -24,6 +24,25 @@ addPost = async (req, res, next) =>
     }
 }
 
+
+getPostById = async (req, res, next)=>{
+    try {
+        const postId = req.params.id
+        const post = await Post.findOne({_id: postId})
+        const recomended = await Post.find({
+            tags: {$in: [...post.tags]},
+            _id: {$ne: post._id}
+        })
+        res.status(200).json({
+            success: true,
+            post,
+            recomended
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 getAllPosts = async (req, res, next) =>
 {
     try {
@@ -50,7 +69,7 @@ likePost = async (req, res, next) =>{
         }
         res.status(200).json({
             success: true,
-            post
+            post,
         })
     } catch (error) {
         next(error)
@@ -130,7 +149,7 @@ deletePost = async (req, res, next) =>
 };
 
 
-module.exports = { addPost, getAllPosts, likePost, removeLike, updatePost, deletePost }
+module.exports = { addPost, getAllPosts, likePost, removeLike, updatePost, deletePost, getPostById }
 
 
 

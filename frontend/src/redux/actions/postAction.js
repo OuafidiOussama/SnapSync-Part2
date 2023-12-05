@@ -8,6 +8,9 @@ import {
     GET_ALL_POSTS_FAIL,
     GET_ALL_POSTS_REQUEST,
     GET_ALL_POSTS_SUCCESS,
+    GET_POST_FAIL,
+    GET_POST_REQUEST,
+    GET_POST_SUCCESS,
     LIKE_A_POST_FAIL,
     LIKE_A_POST_REQUEST,
     LIKE_A_POST_SUCCESS,
@@ -35,6 +38,25 @@ export const getAllPostsAction= () => async(dispatch)=>{
     } catch (error) {
         dispatch({
             type: GET_ALL_POSTS_FAIL,
+            payload: error.response.data.error
+        })
+        toast.error('Something Went Wrong !')
+    }
+}
+
+export const getPostByIdAction = (id) => async(dispatch)=>{
+    dispatch({
+        type: GET_POST_REQUEST
+    })
+    try {
+        const {data} = await PostServices.getPostById(id)
+        dispatch({
+            type: GET_POST_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: GET_POST_FAIL,
             payload: error.response.data.error
         })
         toast.error('Something Went Wrong !')

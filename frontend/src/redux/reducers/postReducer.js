@@ -8,6 +8,9 @@ import {
     GET_ALL_POSTS_FAIL,
     GET_ALL_POSTS_REQUEST,
     GET_ALL_POSTS_SUCCESS,
+    GET_POST_FAIL,
+    GET_POST_REQUEST,
+    GET_POST_SUCCESS,
     LIKE_A_POST_FAIL,
     LIKE_A_POST_REQUEST,
     LIKE_A_POST_SUCCESS,
@@ -33,6 +36,30 @@ export const getAllPostsReducer = (state={}, action)=>{
                 payload
             }
         case GET_ALL_POSTS_FAIL:
+            return{
+                loading: false,
+                error: payload
+            }
+        default:
+            return state
+    }
+
+}
+
+export const getPostByIdReducer = (state={}, action)=>{
+    const {type, payload} = action
+
+    switch (type) {
+        case GET_POST_REQUEST:
+            return {
+                loading: true
+            }
+        case GET_POST_SUCCESS:
+            return{
+                loading: false,
+                payload
+            }
+        case GET_POST_FAIL:
             return{
                 loading: false,
                 error: payload

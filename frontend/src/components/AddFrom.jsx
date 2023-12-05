@@ -42,6 +42,7 @@ export function AddFrom({isUpdate, setIsUpdate, postToUpdate, setPostToUpdate}){
       }
     })
 
+
     const handleTags = (e) => {
       const tagsArray = e.target.value.split(',').map(tag => tag.trim());
       formik.handleChange(e);

@@ -6,6 +6,10 @@ class PostServices {
         return api.get("/posts/getAll")
     }
 
+    getPostById(id){
+        return api.get(`/posts/post/${id}`)
+    }
+
     createPost(data){
         return api.post('/posts/create', data)
     }

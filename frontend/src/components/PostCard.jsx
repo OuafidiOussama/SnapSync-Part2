@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment'
 import { deletePostAction, likePostAction, unlikePostAction } from '../redux/actions/postAction';
 import { Icon } from '@iconify/react'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const PostCard = ({post, onUpdate}) =>{
   const dispatch = useDispatch();
+  const history = useHistory()
   const {userInfo} = useSelector(state=>state.login)
   const googleUser = JSON.parse(localStorage.getItem('googleUser'))
-  const {_id, createdAt, creator, tags, title, message, likes, picture} = post
+  const {_id, createdAt, creator, tags, title, message, likes, picture, publishedBy} = post
   const createdTime = moment(createdAt).fromNow()
 
 
@@ -18,6 +20,14 @@ const PostCard = ({post, onUpdate}) =>{
         isUpdate: true,
         postToUpdate: post
       })
+    }
+  }
+
+  const IsCreator = ()=>{
+    if(((userInfo && userInfo.user._id) || (googleUser && googleUser.sub)) === publishedBy){
+      return true
+    }else{
+      return false
     }
   }
 
@@ -35,21 +45,23 @@ const PostCard = ({post, onUpdate}) =>{
       dispatch(deletePostAction(id))
     }
   }
+
+  const showPost= ()=>{
+    history.push(`/post/${_id}`)
+  }
   return (
-    <div className="w-80 h-[450px] bg-white shadow-lg rounded-lg border-[1px] overflow-hidden ">
+    <div className="w-80 h-[450px] bg-white shadow-lg rounded-lg border-[1px] overflow-hidden cursor-pointer" onClick={showPost}>
       <div className="w-full h-1/2 relative">
             <div className="w-full h-full absolute bg-black opacity-40"></div>
             <img src={picture} alt="hello" className="object-cover w-full h-full" />
             <div className="absolute w-full h-full top-0 flex px-5 pt-5 justify-between text-white">
                 <p className="text-xl flex flex-col">{creator}<span className="text-sm">{createdTime}</span></p>
-                <button className='h-12'  id='update' onClick={handleUpdatePost}>
+                {IsCreator() ? <button className='h-12'  id='update' onClick={handleUpdatePost}>
                   <svg
                     fill='#ffff' xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" width="24"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z" /></svg>
-                </button>
+                </button> : ''}
             </div>
         </div>
-
-
 
       <div className="p-4 flex flex-col ">
         <p className="text-gray-800 font-light opacity-50">
@@ -78,11 +90,11 @@ const PostCard = ({post, onUpdate}) =>{
           }
 
           <div>
-            <button type='submit' onClick={(e)=> deletePostById(e, _id)}
+            {IsCreator() ? <button type='submit' onClick={(e)=> deletePostById(e, _id)}
               className="py-3 px-4 bg-white text-gray-600 rounded hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 inline-flex items-center">
               <svg fill='#3F42F1' xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" /></svg>
               <p className='text-indigo-500'>DELETE</p>
-            </button>
+            </button>: ''}
           </div>
 
 

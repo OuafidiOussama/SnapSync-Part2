@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const Home = React.lazy(() => import("./pages/Home"))
 const Auth = React.lazy(() => import("./pages/Auth"))
+const Post = React.lazy(() => import("./pages/Post"))
 const NotFound = React.lazy(() => import("./pages/NotFound"))
 
 function App(){
@@ -20,6 +21,7 @@ function App(){
                 {/* {routes.map(({path, element}, i)=>(<Route exact path={path} component={element} key={i}/>))} */}
                 <Route exact path="/" component={Home} />
                 <Route  path="/auth" component={Auth} />
+                <Route  path="/post/:id" component={Post} />
                 <Route  path="*" component={NotFound} />
               </Switch>
           </GoogleOAuthProvider>

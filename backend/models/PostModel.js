@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const {ObjectId} = mongoose.Schema
 
 const postSchema = new mongoose.Schema({
     creator:{
@@ -20,7 +19,6 @@ const postSchema = new mongoose.Schema({
     },
     tags:[{
         type: String,
-        trim: true,
         required: [true, 'Please Provide at least one Tag']
     }],
     picture:{
